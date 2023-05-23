@@ -20,7 +20,7 @@ def ler_arquivo(nome_arquivo="input.txt"):
 
 def main():
     print(ler_arquivo())
-
+    
 
 if __name__ == "__main__":
     main()
