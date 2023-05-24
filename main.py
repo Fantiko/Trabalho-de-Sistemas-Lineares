@@ -18,9 +18,10 @@ def ler_arquivo(nome_arquivo="input.txt"):
             lista_sistemas_b.append(linha_b)
     return dicionario, lista_sistemas, lista_sistemas_b
 
+
 def main():
     print(ler_arquivo())
-    
+
 
 if __name__ == "__main__":
     main()
