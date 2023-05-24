@@ -39,7 +39,7 @@ def gauss_jacobi(dicionario, lista_sistemas, lista_sistemas_b):
                 x, x_anterior = g
             else:
                 x_anterior = x
-
+            # gerando a matriz para o cálculo iterativo (achar alguma forma de usar isso no código do pedro)
             for i in n:
                 soma_com_variaveis = 0
                 for j in n:
@@ -49,6 +49,13 @@ def gauss_jacobi(dicionario, lista_sistemas, lista_sistemas_b):
                 x[i] = (lista_sistemas_b[i] - soma_com_variaveis) / a[i][i]
 
             # avaliando critério de parada
+            resultado = [abs(x - y) for x, y in
+                         zip(x, x_anterior)]  # subtraindo os valores da lista x_anterior dos valores da lista x
+            d = max(resultado)
+            dr = d / max(x)
+
+            if dr < dicionario['precisao']:
+                condicao_de_parada = False
 
             iteracao += 1
 
