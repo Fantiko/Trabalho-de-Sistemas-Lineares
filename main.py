@@ -19,6 +19,7 @@ def ler_arquivo(nome_arquivo="input.txt"):
     return dicionario, lista_sistemas, lista_sistemas_b
 
 
+
 def eliminacao_gauss(dicionario, lista_sistemas, lista_sistemas_b):
     for sistema in lista_sistemas:  # fazer todos os sitemas
         for etapa in range(dicionario["dimensao"]):  # para cada linha do sistema
