@@ -33,12 +33,16 @@ def warning():
 
 
 def gauss_jacobi(dicionario, lista_sistemas, lista_sistemas_b):
+
     # Gerando uma lista de índices para iteração
     n = range(dicionario['dimensao'])
     # Inicializando uma lista vazia para armazenar os resultados
     lista_resultados = []
     idx = 0
     # Iterando sobre cada sistema
+
+    #TODO: Alterar a lista para apenas um sistema, com vários sistemas "B"
+
     for a in lista_sistemas:
         flag = False
         lista_b = lista_sistemas_b[idx]
@@ -79,10 +83,7 @@ def gauss_jacobi(dicionario, lista_sistemas, lista_sistemas_b):
                     soma_com_variaveis = soma_com_variaveis + ((-1 * a[i][j]) * x[j])
 
                 # Tratando a divisão por zero
-                if a[i][i] == 0:
-                    x_resposta[i] = (lista_b[i] + soma_com_variaveis) * a[i][i]
-                else:
-                    x_resposta[i] = (lista_b[i] + soma_com_variaveis) / a[i][i]
+                x_resposta[i] = (lista_b[i] + soma_com_variaveis) / a[i][i]
 
             # Avaliando a condição de parada
             resultado = [abs(x - y) for x, y in zip(x_resposta, x)]
