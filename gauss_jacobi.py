@@ -9,30 +9,29 @@ def ler_arquivo(nome_arquivo="input.txt"):
             "precisao": float(numeros[2])
         }
         # Inicializando listas vazias para armazenar os sistemas e os termos independentes
-        lista_sistemas = []
+        sistema = []
         lista_sistemas_b = []
-        # Iterando sobre a quantidade de sistemas especificada no arquivo
+
+        for _ in range(dicionario["dimensao"]):
+            linha = list(map(float, arquivo.readline().split()))
+            sistema.append(linha)
+
         for _ in range(dicionario["quantidade_sistemas"]):
-            # Lendo as linhas do sistema e convertendo os números em uma matriz
-            sistema = []
-            for _ in range(dicionario["dimensao"]):
-                linha = list(map(float, arquivo.readline().split()))
-                sistema.append(linha)
-            # Adicionando o sistema à lista de sistemas
-            lista_sistemas.append(sistema)
             # Lendo a linha de termos independentes e convertendo os números em uma lista
             linha_b = list(map(float, arquivo.readline().split()))
             # Adicionando os termos independentes à lista de termos independentes
             lista_sistemas_b.append(linha_b)
     # Retornando as informações lidas do arquivo
-    return dicionario, lista_sistemas, lista_sistemas_b
+
+    print(sistema, lista_sistemas_b)
+    return dicionario, sistema, lista_sistemas_b
 
 
 def warning():
     return 'Não foi possível resolver este sistema com o método Gauss-Jacobi por causa de um zero na diagonal principal.'
 
 
-def gauss_jacobi(dicionario, lista_sistemas, lista_sistemas_b):
+def gauss_jacobi(dicionario, principal_sistema, lista_sistemas_b):
 
     # Gerando uma lista de índices para iteração
     n = range(dicionario['dimensao'])
@@ -41,62 +40,59 @@ def gauss_jacobi(dicionario, lista_sistemas, lista_sistemas_b):
     idx = 0
     # Iterando sobre cada sistema
 
-    #TODO: Alterar a lista para apenas um sistema, com vários sistemas "B"
+    flag = False
+    lista_b = lista_sistemas_b[idx]
+    condicao_de_parada = True
 
-    for a in lista_sistemas:
-        flag = False
-        lista_b = lista_sistemas_b[idx]
-        condicao_de_parada = True
+    # Inicializando o vetor resposta como uma lista de zeros
+    x_resposta = [0] * dicionario['dimensao']
+    # Calculando o vetor G
+    g = []
+    for aux in n:
+        # Tratando a divisão por zero
+        try:
+            g.append(lista_b[aux] / principal_sistema[aux][aux])
+        except ZeroDivisionError:
+            # Se houver uma divisão por zero, adiciona uma mensagem de erro aos resultados e interrompe o cálculo
+            lista_resultados.append([warning()])
+            flag = True
+            break
 
-        # Inicializando o vetor resposta como uma lista de zeros
-        x_resposta = [0] * dicionario['dimensao']
-        # Calculando o vetor G
-        g = []
-        for aux in n:
+    iteracao = 1
+    if flag:
+        condicao_de_parada = False
+
+    # Loop para realizar as iterações do método de Gauss-Jacobi
+    while condicao_de_parada:
+        if iteracao == 1:
+            x = g
+        else:
+            x = x_resposta
+            x_resposta = [0] * dicionario['dimensao']
+
+        # Calculando os novos valores de x
+        for i in n:
+            soma_com_variaveis = 0
+            for j in n:
+                if i == j:
+                    continue
+                soma_com_variaveis = soma_com_variaveis + ((-1 * principal_sistema[i][j]) * x[j])
+
             # Tratando a divisão por zero
-            try:
-                g.append(lista_b[aux] / a[aux][aux])
-            except ZeroDivisionError:
-                # Se houver uma divisão por zero, adiciona uma mensagem de erro aos resultados e interrompe o cálculo
-                lista_resultados.append([warning()])
-                flag = True
-                break
+            x_resposta[i] = (lista_b[i] + soma_com_variaveis) / principal_sistema[i][i]
 
-        iteracao = 1
-        if flag:
+        # Avaliando a condição de parada
+        resultado = [abs(x - y) for x, y in zip(x_resposta, x)]
+
+        d = max(resultado)
+        dr = d / max(x_resposta)
+
+        if dr < dicionario['precisao']:
+            # Se a condição de parada for satisfeita, adiciona o vetor resposta aos resultados
             condicao_de_parada = False
+            lista_resultados.append(x_resposta)
 
-        # Loop para realizar as iterações do método de Gauss-Jacobi
-        while condicao_de_parada:
-            if iteracao == 1:
-                x = g
-            else:
-                x = x_resposta
-                x_resposta = [0] * dicionario['dimensao']
-
-            # Calculando os novos valores de x
-            for i in n:
-                soma_com_variaveis = 0
-                for j in n:
-                    if i == j:
-                        continue
-                    soma_com_variaveis = soma_com_variaveis + ((-1 * a[i][j]) * x[j])
-
-                # Tratando a divisão por zero
-                x_resposta[i] = (lista_b[i] + soma_com_variaveis) / a[i][i]
-
-            # Avaliando a condição de parada
-            resultado = [abs(x - y) for x, y in zip(x_resposta, x)]
-
-            d = max(resultado)
-            dr = d / max(x_resposta)
-
-            if dr < dicionario['precisao']:
-                # Se a condição de parada for satisfeita, adiciona o vetor resposta aos resultados
-                condicao_de_parada = False
-                lista_resultados.append(x_resposta)
-
-            iteracao = iteracao + 1
+        iteracao = iteracao + 1
 
         idx += 1
 
