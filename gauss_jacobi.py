@@ -29,7 +29,7 @@ def ler_arquivo(nome_arquivo="input.txt"):
 
 
 def warning():
-    return 'Não foi possível resolver este sistema com o método Gauss-Jacobi por causa de um zero na diagonal principal. Tente o método de Gauss-Seidel!'
+    return 'Não foi possível resolver este sistema com o método Gauss-Jacobi por causa de um zero na diagonal principal.'
 
 
 def gauss_jacobi(dicionario, lista_sistemas, lista_sistemas_b):
