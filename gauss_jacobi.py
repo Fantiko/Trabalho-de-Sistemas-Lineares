@@ -60,12 +60,12 @@ def gauss_jacobi(dicionario, principal_sistema, lista_sistemas_b):
 
             # Avaliando a condição de parada
             resultado = [abs(x - y) for x, y in zip(x_resposta, x)]
-            print('resultado: ', resultado)
-            print('x_resposta: ', x_resposta)
+            #  print('resultado: ', resultado)
+            #  print('x_resposta: ', x_resposta)
             d = max(resultado)
             dr = d / abs(max(x_resposta))
-            print('d: ', d)
-            print('dr: ', dr)
+            #  print('d: ', d)
+            #  print('dr: ', dr)
             if dr < dicionario['precisao']:
                 # Se a condição de parada for satisfeita, adiciona o vetor resposta aos resultados
                 condicao_de_parada = False
@@ -80,13 +80,3 @@ def gauss_jacobi(dicionario, principal_sistema, lista_sistemas_b):
 
     # Retornando a lista de resultados
     return lista_resultados , tempos
-
-
-def main():
-    # Chamando as funções para realizar os cálculos e exibir os resultados
-    r = gauss_jacobi(*ler_arquivo())
-    print(r)
-
-
-if __name__ == "__main__":
-    main()

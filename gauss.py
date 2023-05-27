@@ -1,5 +1,5 @@
 import time
-
+from utilidade import *
 
 
 def warning():
@@ -10,7 +10,7 @@ def eliminacao_gauss(dicionario, sistema, lista_sistemas_b):
     tempos = []  # calcular o tempo
     for matriz in lista_sistemas_b:  # fazer todos os sitemas
         inicio = time.perf_counter()  # calcular o tempo
-        flag = False
+
         for etapa in range(dicionario["dimensao"]):  # para cada linha do sistema
             pivo = sistema[etapa][etapa]  # o pivo é o Akk da matriz
             if pivo == 0:  # 0 na diagonal principal
@@ -20,11 +20,7 @@ def eliminacao_gauss(dicionario, sistema, lista_sistemas_b):
                         pivo = sistema[etapa][etapa]
                         break
                 else:
-                    flag = True
                     continue
-            if flag:
-                lista_sistemas_b[lista_sistemas_b.index(matriz)] = warning()
-                break
 
             sistema[etapa] = [elemento / pivo for elemento in sistema[etapa]]
             matriz[etapa] = matriz[etapa] / pivo
@@ -32,9 +28,8 @@ def eliminacao_gauss(dicionario, sistema, lista_sistemas_b):
                 if i != etapa:
                     fator = sistema[i][etapa]
                     sistema[i] = [elemento - fator * sistema[etapa][j] for j, elemento in enumerate(sistema[i])]
-                    matriz[i] = \
-                        matriz[i] - fator * \
-                        matriz[etapa]
+                    matriz[i] = matriz[i] - fator * matriz[etapa]
+
         fim = time.perf_counter()  # calcular o tempo
         tempo_decorrido = fim - inicio  # calcular o tempo
         tempos.append(tempo_decorrido)  # calcular o tempo
