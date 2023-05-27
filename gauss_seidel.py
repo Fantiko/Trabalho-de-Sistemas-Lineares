@@ -5,7 +5,7 @@ def warning():
     return 'Não foi possível resolver este sistema com o método Gauss-Jacobi por causa de um zero na diagonal principal.'
 
 
-def gauss_jacobi(dicionario, principal_sistema, lista_sistemas_b):
+def gauss_seidel(dicionario, principal_sistema, lista_sistemas_b):
 
     # Gerando uma lista de índices para iteração
     n = range(dicionario['dimensao'])
@@ -48,15 +48,25 @@ def gauss_jacobi(dicionario, principal_sistema, lista_sistemas_b):
                 x_resposta = [0] * dicionario['dimensao']
 
             # Calculando os novos valores de x
+            ocupada = 0
+            var_x = []
             for i in n:
                 soma_com_variaveis = 0
                 for j in n:
                     if i == j:
                         continue
-                    soma_com_variaveis = soma_com_variaveis + ((-1 * principal_sistema[i][j]) * x[j]) #-1250 -3.75
+                    if j == 0 or ocupada <= j:
+                        soma_com_variaveis = soma_com_variaveis + ((-1 * principal_sistema[i][j]) * x[j])
+                    else:
+                        soma_com_variaveis = soma_com_variaveis + ((-1 * principal_sistema[i][j]) * var_x[j-1])
+
+                    var_x.append((lista_b[i] + soma_com_variaveis) / principal_sistema[i][i])
+                    ocupada = ocupada + 1
 
                 # Tratando a divisão por zero
                 x_resposta[i] = (lista_b[i] + soma_com_variaveis) / principal_sistema[i][i]
+                var_x.clear()
+                ocupada = 0
 
             # Avaliando a condição de parada
             resultado = [abs(x - y) for x, y in zip(x_resposta, x)]
@@ -79,12 +89,12 @@ def gauss_jacobi(dicionario, principal_sistema, lista_sistemas_b):
             #idx += 1
 
     # Retornando a lista de resultados
-    return lista_resultados , tempos
+    return lista_resultados, tempos
 
 
 def main():
     # Chamando as funções para realizar os cálculos e exibir os resultados
-    r = gauss_jacobi(*ler_arquivo())
+    r = gauss_seidel(*ler_arquivo())
     print(r)
 
 

@@ -1,10 +1,11 @@
 from gauss import *
 from gauss_jacobi import *
+from gauss_seidel import *
 from utilidade import *
 
 def main():
     # lista com as funções em sequência
-    funcoes = [eliminacao_gauss]
+    funcoes = [eliminacao_gauss, gauss_seidel]
     limpar_arquivo()
     for funcao in funcoes:
 
