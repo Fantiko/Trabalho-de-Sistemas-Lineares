@@ -1,31 +1,5 @@
-def ler_arquivo(nome_arquivo="input.txt"):
-    with open(nome_arquivo) as arquivo:
-        # Lendo a primeira linha do arquivo e convertendo os números em uma lista
-        numeros = arquivo.readline().split()
-        # Criando um dicionário com as informações lidas do arquivo
-        dicionario = {
-            "quantidade_sistemas": int(numeros[0]),
-            "dimensao": int(numeros[1]),
-            "precisao": float(numeros[2])
-        }
-        # Inicializando listas vazias para armazenar os sistemas e os termos independentes
-        sistema = []
-        lista_sistemas_b = []
-
-        for _ in range(dicionario["dimensao"]):
-            linha = list(map(float, arquivo.readline().split()))
-            sistema.append(linha)
-
-        for _ in range(dicionario["quantidade_sistemas"]):
-            # Lendo a linha de termos independentes e convertendo os números em uma lista
-            linha_b = list(map(float, arquivo.readline().split()))
-            # Adicionando os termos independentes à lista de termos independentes
-            lista_sistemas_b.append(linha_b)
-    # Retornando as informações lidas do arquivo
-
-    print(sistema, lista_sistemas_b)
-    return dicionario, sistema, lista_sistemas_b
-
+import time
+from utilidade import *
 
 def warning():
     return 'Não foi possível resolver este sistema com o método Gauss-Jacobi por causa de um zero na diagonal principal.'
@@ -39,7 +13,10 @@ def gauss_jacobi(dicionario, principal_sistema, lista_sistemas_b):
     lista_resultados = []
     idx = 0
     # Iterando sobre cada sistema
+    tempos = []  # calcular o tempo
+
     for b in lista_sistemas_b:
+        inicio = time.perf_counter()  # calcular o tempo
         flag = False
         lista_b = b
         condicao_de_parada = True
@@ -87,7 +64,7 @@ def gauss_jacobi(dicionario, principal_sistema, lista_sistemas_b):
             print('resultado: ', resultado)
             print('x_resposta: ', x_resposta)
             d = max(resultado)
-            dr = d / max(x_resposta)
+            dr = d / abs(max(x_resposta))
             print('d: ', d)
             print('dr: ', dr)
             if dr < dicionario['precisao']:
@@ -96,11 +73,14 @@ def gauss_jacobi(dicionario, principal_sistema, lista_sistemas_b):
                 lista_resultados.append(x_resposta)
 
             iteracao = iteracao + 1
+        fim = time.perf_counter()  # calcular o tempo
+        tempo_decorrido = fim - inicio  # calcular o tempo
+        tempos.append(tempo_decorrido)  # calcular o tempo
 
             #idx += 1
 
     # Retornando a lista de resultados
-    return lista_resultados
+    return lista_resultados , tempos
 
 
 def main():

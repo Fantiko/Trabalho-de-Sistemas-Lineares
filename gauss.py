@@ -1,28 +1,5 @@
-def ler_arquivo(nome_arquivo="input.txt"):
-    with open(nome_arquivo) as arquivo:
-        # Lendo a primeira linha do arquivo e convertendo os números em uma lista
-        numeros = arquivo.readline().split()
-        # Criando um dicionário com as informações lidas do arquivo
-        dicionario = {
-            "quantidade_sistemas": int(numeros[0]),
-            "dimensao": int(numeros[1]),
-            "precisao": float(numeros[2])
-        }
-        # Inicializando listas vazias para armazenar os sistemas e os termos independentes
-        sistema = []
-        lista_sistemas_b = []
+import time
 
-        for _ in range(dicionario["dimensao"]):
-            linha = list(map(float, arquivo.readline().split()))
-            sistema.append(linha)
-
-        for _ in range(dicionario["quantidade_sistemas"]):
-            # Lendo a linha de termos independentes e convertendo os números em uma lista
-            linha_b = list(map(float, arquivo.readline().split()))
-            # Adicionando os termos independentes à lista de termos independentes
-            lista_sistemas_b.append(linha_b)
-    # Retornando as informações lidas do arquivo
-    return dicionario, sistema, lista_sistemas_b
 
 
 def warning():
@@ -30,7 +7,9 @@ def warning():
 
 
 def eliminacao_gauss(dicionario, sistema, lista_sistemas_b):
+    tempos = []  # calcular o tempo
     for matriz in lista_sistemas_b:  # fazer todos os sitemas
+        inicio = time.perf_counter()  # calcular o tempo
         flag = False
         for etapa in range(dicionario["dimensao"]):  # para cada linha do sistema
             pivo = sistema[etapa][etapa]  # o pivo é o Akk da matriz
@@ -44,7 +23,7 @@ def eliminacao_gauss(dicionario, sistema, lista_sistemas_b):
                     flag = True
                     continue
             if flag:
-                lista_sistemas_b[lista_sistemas.index(sistema)] = warning()
+                lista_sistemas_b[lista_sistemas_b.index(matriz)] = warning()
                 break
 
             sistema[etapa] = [elemento / pivo for elemento in sistema[etapa]]
@@ -56,14 +35,8 @@ def eliminacao_gauss(dicionario, sistema, lista_sistemas_b):
                     matriz[i] = \
                         matriz[i] - fator * \
                         matriz[etapa]
+        fim = time.perf_counter()  # calcular o tempo
+        tempo_decorrido = fim - inicio  # calcular o tempo
+        tempos.append(tempo_decorrido)  # calcular o tempo
 
-    return lista_sistemas_b
-
-
-def main():
-    print(ler_arquivo())
-    print(eliminacao_gauss(*ler_arquivo()))
-
-
-if __name__ == "__main__":
-    main()
+    return lista_sistemas_b, tempos
