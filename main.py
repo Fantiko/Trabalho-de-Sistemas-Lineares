@@ -5,7 +5,7 @@ from utilidade import *
 
 def main():
     # lista com as funções em sequência
-    funcoes = [eliminacao_gauss, gauss_seidel]
+    funcoes = [eliminacao_gauss, gauss_jacobi, gauss_seidel]
     limpar_arquivo()
     for funcao in funcoes:
 
